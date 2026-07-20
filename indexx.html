@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rabbit Holes — tiny detours for your brain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FDFDFB;
+    --ink:#15171C;
+    --ink-soft:#5B5F6B;
+    --marigold:#FFD873;
+    --cherry:#FF9B8A;
+    --mint:#7BEFC4;
+    --periwinkle:#A9B8FF;
+    --orchid:#DAB6FF;
+    --sky:#8FE1FF;
+    --radius:22px;
+    --shadow:0 10px 30px rgba(20,20,30,.08);
+  }
+ 
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .hidden{display:none !important;}
+  button{font-family:inherit;}
+ 
+  /* ---------- nav ---------- */
+  .nav{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:24px 32px;flex-wrap:wrap;gap:12px;
+  }
+  .brand{
+    font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.35rem;
+    display:flex;align-items:center;gap:8px;
+  }
+  .brand span.dot{
+    display:inline-block;width:10px;height:10px;border-radius:50%;
+    background:var(--cherry);
+  }
+  .btn-surprise{
+    background:var(--ink);color:var(--paper);border:none;
+    padding:10px 18px;border-radius:999px;cursor:pointer;
+    font-family:'Space Mono',monospace;font-size:.82rem;letter-spacing:.02em;
+    transition:transform .15s ease;
+  }
+  .btn-surprise:hover{transform:translateY(-2px) rotate(-1deg);}
+  .btn-surprise:focus-visible{outline:3px solid var(--periwinkle);outline-offset:3px;}
+ 
+  /* ---------- hero ---------- */
+  .hero{text-align:center;padding:36px 24px 56px;}
+  .hero h1{
+    font-family:'Fredoka',sans-serif;font-weight:700;
+    font-size:clamp(2.3rem,6vw,4rem);margin:0 0 4px;line-height:1.05;
+  }
+  .hero .squiggle{display:block;margin:8px auto 20px;width:min(240px,55vw);}
+  .hero .squiggle path{
+    stroke-dasharray:420;stroke-dashoffset:420;
+    animation:draw 1s ease forwards .25s;
+  }
+  @keyframes draw{to{stroke-dashoffset:0;}}
+  .hero .tagline{max-width:520px;margin:0 auto;color:var(--ink-soft);font-size:1.05rem;}
+ 
+  /* ---------- grid ---------- */
+  .grid{
+    max-width:1080px;margin:0 auto;padding:0 24px 90px;
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+  }
+  .card{
+    --accent:#eee;
+    background:var(--accent);
+    border:none;border-radius:var(--radius);
+    padding:26px 24px;text-align:left;cursor:pointer;
+    color:var(--ink);box-shadow:var(--shadow);
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .card:hover{transform:translateY(-4px) rotate(-0.6deg);box-shadow:0 16px 34px rgba(20,20,30,.14);}
+  .card:focus-visible{outline:3px solid var(--ink);outline-offset:3px;}
+  .card-icon{font-size:1.9rem;display:block;margin-bottom:10px;}
+  .card-tag{
+    font-family:'Space Mono',monospace;font-size:.68rem;letter-spacing:.06em;
+    background:rgba(255,255,255,.55);padding:3px 9px;border-radius:999px;
+    display:inline-block;margin-bottom:10px;
+  }
+  .card h2{font-family:'Fredoka',sans-serif;font-size:1.2rem;margin:0 0 6px;}
+  .card p{margin:0;color:rgba(21,23,28,.72);font-size:.9rem;}
+ 
+  .card.brewing{background:var(--paper);border:2px dashed rgba(21,23,28,.25);box-shadow:none;}
+  .card.brewing:hover{transform:none;box-shadow:none;}
+  .card.brewing .card-tag{background:rgba(21,23,28,.07);}
+ 
+  /* ---------- toy views ---------- */
+  .view{max-width:600px;margin:0 auto;padding:56px 24px 100px;text-align:center;}
+  .back-btn{
+    background:none;border:none;color:var(--ink-soft);cursor:pointer;
+    font-family:'Space Mono',monospace;font-size:.82rem;margin-bottom:26px;
+  }
+  .back-btn:hover{color:var(--ink);}
+  .back-btn:focus-visible{outline:2px solid var(--ink);outline-offset:3px;}
+  .view-inner h2{font-family:'Fredoka',sans-serif;font-size:1.9rem;margin:0 0 8px;}
+  .view-inner > p{color:var(--ink-soft);}
+ 
+  .big-button{
+    margin-top:26px;background:var(--cherry);border:none;color:var(--ink);
+    font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.05rem;
+    padding:24px 38px;border-radius:20px;cursor:pointer;box-shadow:var(--shadow);
+  }
+  .big-button:focus-visible{outline:3px solid var(--ink);outline-offset:3px;}
+  .big-button.shake{animation:shake .32s ease;}
+  @keyframes shake{
+    0%,100%{transform:translate(0,0) rotate(0);}
+    20%{transform:translate(-3px,2px) rotate(-2deg);}
+    40%{transform:translate(3px,-2px) rotate(2deg);}
+    60%{transform:translate(-2px,-2px) rotate(-1deg);}
+    80%{transform:translate(2px,2px) rotate(1deg);}
+  }
+  .counter-label{margin-top:16px;font-family:'Space Mono',monospace;font-size:.88rem;}
+ 
+  #view-dread{
+    border-radius:28px;
+    background:radial-gradient(circle at 30% 15%, hsl(calc(160 - var(--mood,0) * 1.6) 70% 90%), var(--paper) 72%);
+    transition:background .3s ease;
+  }
+  .dread-slider{width:100%;max-width:420px;margin:30px auto 12px;display:block;}
+  .dread-label{font-family:'Fredoka',sans-serif;font-size:1.25rem;min-height:1.6em;}
+ 
+  .lick-btn{
+    margin-top:26px;background:var(--mint);border:none;color:var(--ink);
+    font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.6rem;
+    width:120px;height:120px;border-radius:50%;cursor:pointer;box-shadow:var(--shadow);
+  }
+  .lick-btn:focus-visible{outline:3px solid var(--ink);outline-offset:3px;}
+  .lick-caption{margin-top:18px;font-family:'Fredoka',sans-serif;font-size:1.1rem;min-height:1.6em;}
+ 
+  .bee-form{display:flex;gap:10px;justify-content:center;margin-top:24px;flex-wrap:wrap;}
+  .bee-form input{
+    padding:12px 14px;border-radius:12px;border:2px solid rgba(21,23,28,.15);
+    font-family:'Space Mono',monospace;width:130px;font-size:1rem;
+  }
+  .bee-form input:focus-visible{outline:3px solid var(--ink);outline-offset:2px;}
+  .bee-form button{
+    padding:12px 20px;border-radius:12px;border:none;background:var(--ink);
+    color:var(--paper);cursor:pointer;font-family:'Space Mono',monospace;
+  }
+  #bee-feedback{margin-top:18px;font-family:'Fredoka',sans-serif;font-size:1.1rem;min-height:1.6em;}
+  .bee-again{
+    margin-top:14px;background:none;border:2px dashed rgba(21,23,28,.3);
+    padding:8px 16px;border-radius:999px;font-family:'Space Mono',monospace;cursor:pointer;
+  }
+ 
+  /* ---------- toast ---------- */
+  .toast{
+    position:fixed;bottom:26px;left:50%;
+    transform:translate(-50%,16px);
+    background:var(--ink);color:var(--paper);
+    padding:12px 20px;border-radius:999px;
+    font-family:'Space Mono',monospace;font-size:.82rem;
+    opacity:0;pointer-events:none;
+    transition:opacity .25s ease, transform .25s ease;
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0);}
+ 
+  /* ---------- footer ---------- */
+  .footer{
+    text-align:center;padding:36px 24px 60px;
+    color:var(--ink-soft);font-family:'Space Mono',monospace;font-size:.78rem;
+  }
+ 
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;transition:none !important;}
+    html{scroll-behavior:auto;}
+    .hero .squiggle path{stroke-dashoffset:0;}
+  }
+</style>
+</head>
+<body>
+ 
+<header class="nav">
+  <div class="brand"><span class="dot"></span>Rabbit Holes</div>
+  <button class="btn-surprise" id="surprise-btn">🎲 Surprise me</button>
+</header>
+ 
+<section class="hero">
+  <h1>Fall down<br>a little hole.</h1>
+  <svg class="squiggle" viewBox="0 0 200 20" fill="none" aria-hidden="true">
+    <path d="M2 10 Q 15 0 30 10 T 60 10 T 90 10 T 120 10 T 150 10 T 180 10 T 198 10"
+          stroke="#15171C" stroke-width="4" stroke-linecap="round"/>
+  </svg>
+  <p class="tagline">Six mildly pointless experiments for your brain. Pick one below, or let chance pick for you.</p>
+</section>
+ 
+<main id="home">
+  <section class="grid" aria-label="Experiments">
+ 
+    <button class="card" data-target="view-button" style="--accent:var(--cherry)">
+      <span class="card-icon" aria-hidden="true">🚫</span>
+      <span class="card-tag">BUTTON</span>
+      <h2>Do Not Press This</h2>
+      <p>It's right there. We dare you.</p>
+    </button>
+ 
+    <button class="card" data-target="view-dread" style="--accent:var(--periwinkle)">
+      <span class="card-icon" aria-hidden="true">🌀</span>
+      <span class="card-tag">SLIDER</span>
+      <h2>The Dread-o-Meter</h2>
+      <p>Slide from "totally fine" to "cosmic void."</p>
+    </button>
+ 
+    <button class="card" data-target="view-licks" style="--accent:var(--mint)">
+      <span class="card-icon" aria-hidden="true">🍭</span>
+      <span class="card-tag">COUNTER</span>
+      <h2>How Many Licks</h2>
+      <p>Science demands data. Start tapping.</p>
+    </button>
+ 
+    <button class="card" data-target="view-bees" style="--accent:var(--marigold)">
+      <span class="card-icon" aria-hidden="true">🐝</span>
+      <span class="card-tag">GUESSING GAME</span>
+      <h2>Guess My Weight in Bees</h2>
+      <p>A number exists. You will not find it quickly.</p>
+    </button>
+ 
+    <button class="card brewing" data-brewing="true">
+      <span class="card-icon" aria-hidden="true">🙏</span>
+      <span class="card-tag">BREWING</span>
+      <h2>Infinite Apology Generator</h2>
+      <p>Corporate-grade sorry, freshly generated.</p>
+    </button>
+ 
+    <button class="card brewing" data-brewing="true">
+      <span class="card-icon" aria-hidden="true">🗂️</span>
+      <span class="card-tag">BREWING</span>
+      <h2>Sort Your Feelings By Size</h2>
+      <p>Drag-and-drop therapy. Emphasis on drag.</p>
+    </button>
+ 
+  </section>
+</main>
+ 
+<section id="view-button" class="view hidden" style="--accent:var(--cherry)">
+  <button class="back-btn" data-back>← back to rabbit holes</button>
+  <div class="view-inner">
+    <h2>Do Not Press This</h2>
+    <p id="button-caption">It's right there. Presumably decorative.</p>
+    <button id="big-red-btn" class="big-button">DO NOT PRESS</button>
+    <p class="counter-label">Presses: <span id="press-count">0</span></p>
+  </div>
+</section>
+ 
+<section id="view-dread" class="view hidden" style="--accent:var(--periwinkle)">
+  <button class="back-btn" data-back>← back to rabbit holes</button>
+  <div class="view-inner">
+    <h2>The Dread-o-Meter</h2>
+    <p>Drag the slider. We'll tell you how you're doing.</p>
+    <input type="range" min="0" max="100" value="0" id="dread-slider" class="dread-slider" aria-label="Dread level">
+    <p class="dread-label" id="dread-label">Suspiciously fine.</p>
+  </div>
+</section>
+ 
+<section id="view-licks" class="view hidden" style="--accent:var(--mint)">
+  <button class="back-btn" data-back>← back to rabbit holes</button>
+  <div class="view-inner">
+    <h2>How Many Licks</h2>
+    <p>The wrapper says "unknown." We intend to find out.</p>
+    <button id="lick-btn" class="lick-btn" aria-label="Tap the lollipop">🍭</button>
+    <p class="counter-label">Licks: <span id="lick-count">0</span></p>
+    <p class="lick-caption" id="lick-caption">The world may never know.</p>
+  </div>
+</section>
+ 
+<section id="view-bees" class="view hidden" style="--accent:var(--marigold)">
+  <button class="back-btn" data-back>← back to rabbit holes</button>
+  <div class="view-inner">
+    <h2>Guess My Weight in Bees</h2>
+    <p>Somewhere between 400 and 1,400 bees. Good luck.</p>
+    <form id="bee-form" class="bee-form">
+      <input type="number" id="bee-input" placeholder="e.g. 900" aria-label="Your guess in bees" required>
+      <button type="submit">Guess</button>
+    </form>
+    <p id="bee-feedback">No guesses yet.</p>
+    <button id="bee-again" class="bee-again" type="button">🔄 New bee count</button>
+  </div>
+</section>
+ 
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+ 
+<footer class="footer">
+  <p>No data collected. No bees harmed. Occasional dignity lost.</p>
+</footer>
+ 
+<script>
+(function(){
+  const home = document.getElementById('home');
+  const hero = document.querySelector('.hero');
+  const views = document.querySelectorAll('.view');
+  const workingIds = ['view-button','view-dread','view-licks','view-bees'];
+ 
+  function showView(id){
+    home.classList.add('hidden');
+    hero.classList.add('hidden');
+    views.forEach(v => v.classList.toggle('hidden', v.id !== id));
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+  function showHome(){
+    views.forEach(v => v.classList.add('hidden'));
+    home.classList.remove('hidden');
+    hero.classList.remove('hidden');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+ 
+  document.querySelectorAll('.card[data-target]').forEach(card=>{
+    card.addEventListener('click', ()=> showView(card.dataset.target));
+  });
+ 
+  let toastTimer;
+  function toast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=> t.classList.remove('show'), 2200);
+  }
+  document.querySelectorAll('.card.brewing').forEach(card=>{
+    card.addEventListener('click', ()=> toast('Still brewing — check back soon.'));
+  });
+ 
+  document.querySelectorAll('[data-back]').forEach(b=> b.addEventListener('click', showHome));
+ 
+  document.getElementById('surprise-btn').addEventListener('click', ()=>{
+    const id = workingIds[Math.floor(Math.random()*workingIds.length)];
+    showView(id);
+  });
+ 
+  /* Do Not Press This */
+  const bigBtn = document.getElementById('big-red-btn');
+  const pressCountEl = document.getElementById('press-count');
+  const captionEl = document.getElementById('button-caption');
+  const captions = [
+    "It's right there. Presumably decorative.",
+    "You pressed it. We saw that.",
+    "We did, in fact, tell you not to.",
+    "Nothing is happening. This is the bit.",
+    "Local authorities have not been alerted. Yet.",
+    "You have pressed a button five times. Reflect on that.",
+    "Some might call this compulsive. We call it data.",
+    "Achievement unlocked: Absolutely Nothing."
+  ];
+  let presses = 0;
+  bigBtn.addEventListener('click', ()=>{
+    presses++;
+    pressCountEl.textContent = presses;
+    captionEl.textContent = captions[Math.min(presses, captions.length-1)];
+    bigBtn.classList.remove('shake');
+    void bigBtn.offsetWidth;
+    bigBtn.classList.add('shake');
+  });
+ 
+  /* Dread-o-meter */
+  const dreadSlider = document.getElementById('dread-slider');
+  const dreadLabel = document.getElementById('dread-label');
+  const dreadPanel = document.getElementById('view-dread');
+  const dreadLevels = [
+    [10, "Suspiciously fine."],
+    [30, "Mild, low-grade unease."],
+    [50, "Something's off, can't place it."],
+    [70, "Actively bracing."],
+    [90, "Cosmic-scale dread."],
+    [101, "Total void. Send help."]
+  ];
+  function updateDread(v){
+    const level = dreadLevels.find(([threshold]) => v < threshold);
+    dreadLabel.textContent = level ? level[1] : dreadLevels[dreadLevels.length-1][1];
+    dreadPanel.style.setProperty('--mood', v);
+  }
+  dreadSlider.addEventListener('input', e => updateDread(Number(e.target.value)));
+  updateDread(Number(dreadSlider.value));
+ 
+  /* How Many Licks */
+  const lickBtn = document.getElementById('lick-btn');
+  const lickCountEl = document.getElementById('lick-count');
+  const lickCaption = document.getElementById('lick-caption');
+  const lickTiers = [
+    "The world may never know.",
+    "Data collection has begun.",
+    "A pattern is emerging.",
+    "This is now a lifestyle.",
+    "Peer review pending.",
+    "You are the science now."
+  ];
+  let licks = 0;
+  lickBtn.addEventListener('click', ()=>{
+    licks++;
+    lickCountEl.textContent = licks;
+    lickCaption.textContent = lickTiers[Math.min(Math.floor(licks/3), lickTiers.length-1)];
+  });
+ 
+  /* Guess My Weight in Bees */
+  function randBees(){ return Math.floor(Math.random()*(1400-400+1))+400; }
+  let beeTarget = randBees();
+  let beeAttempts = 0;
+  const beeForm = document.getElementById('bee-form');
+  const beeInput = document.getElementById('bee-input');
+  const beeFeedback = document.getElementById('bee-feedback');
+  const beeAgain = document.getElementById('bee-again');
+ 
+  beeForm.addEventListener('submit', e=>{
+    e.preventDefault();
+    const guess = Number(beeInput.value);
+    if(!guess) return;
+    beeAttempts++;
+    if(guess === beeTarget){
+      beeFeedback.textContent = `Exactly right. ${beeTarget} bees in ${beeAttempts} guess${beeAttempts===1?'':'es'}. Suspicious.`;
+    } else if(guess < beeTarget){
+      beeFeedback.textContent = "Higher. There are more bees than that.";
+    } else {
+      beeFeedback.textContent = "Lower. That is too many bees.";
+    }
+  });
+  beeAgain.addEventListener('click', ()=>{
+    beeTarget = randBees();
+    beeAttempts = 0;
+    beeInput.value = '';
+    beeFeedback.textContent = "New bee count generated. Guess away.";
+  });
+})();
+</script>
+ 
+</body>
+</html>
+ 
